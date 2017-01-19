@@ -11,6 +11,78 @@
         android:layout_height="fill_parent"
         android:layout_weight="1" >
 
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="end"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="end"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|end"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|end"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|start"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|start"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
