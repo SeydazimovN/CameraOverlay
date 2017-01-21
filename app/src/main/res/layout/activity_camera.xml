@@ -2,14 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:background="@color/colorPrimary"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <FrameLayout
         android:id="@+id/camera_preview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="end"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="end"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginTop="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|end"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|end"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="@dimen/camera_overlay_margin"
+            android:layout_marginEnd="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|start"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
+
+        <View
+            android:background="@android:color/white"
+            android:layout_gravity="bottom|start"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/camera_overlay_margin"
+            android:layout_marginStart="@dimen/camera_overlay_margin"
+            android:layout_marginBottom="@dimen/camera_overlay_margin"/>
 
         <View
             android:background="@android:color/white"

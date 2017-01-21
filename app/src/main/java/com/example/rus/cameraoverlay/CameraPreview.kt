@@ -1,49 +1,86 @@
 package com.example.rus.cameraoverlay
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.hardware.Camera
-import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 
 /**
  * Created by RUS on 13.01.2017.
  */
-class CameraPreview(context: Context, var camera: Camera = Camera.open(), var previewSize: Camera.Size? = null, var isCameraOpened: Boolean = true) : SurfaceView(context), SurfaceHolder.Callback {
+@Suppress("DEPRECATION")
+class CameraPreview(context: Context, var camera: Camera = Camera.open(), var isCameraOpened: Boolean = true) : SurfaceView(context), SurfaceHolder.Callback {
+
+    interface ImageCapturedListener {
+        fun onImageCaptured(bitmap: Bitmap)
+    }
+
+    lateinit var previewSize: Camera.Size
+    lateinit var pictureSize: Camera.Size
 
     init {
         holder.addCallback(this)
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = resolveSize(suggestedMinimumWidth, widthMeasureSpec)
-        val height = resolveSize(suggestedMinimumHeight, heightMeasureSpec)
+        val width = View.resolveSize(suggestedMinimumWidth, widthMeasureSpec)
+        val height = View.resolveSize(suggestedMinimumHeight, heightMeasureSpec);
         setMeasuredDimension(width, height)
 
-        if (previewSize == null) {
-            previewSize = getOptimalPreviewSize(camera.parameters.supportedPreviewSizes, width, height)
+        previewSize = getOptimalPreviewSize(camera.parameters.supportedPreviewSizes, width, height)
+        pictureSize = getOptimalPictureSize(camera.parameters.supportedPictureSizes, width, height)
+    }
+
+    fun getOptimalPreviewSize(sizes: List<Camera.Size>, width: Int, height: Int): Camera.Size {
+        if (sizes.filter { it.width == width && it.height == height }.isNotEmpty()) {
+            return sizes.find { it.width == width && it.height == height }!!
         }
+
+        return sizes.minBy { getEuclidDistance(it.width, it.height, width, height) }!!
+    }
+
+    fun getOptimalPictureSize(sizes: List<Camera.Size>, width: Int, height: Int): Camera.Size {
+        if (sizes.contains(previewSize)) {
+            return previewSize
+        }
+
+        if (sizes.filter { it.width == width && it.height == height }.isNotEmpty()) {
+            return sizes.find { it.width == width && it.height == height }!!
+        }
+
+        return sizes.minBy { getEuclidDistance(it.width, it.height, width, height) }!!
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         if (!isCameraOpened) {
             camera = Camera.open()
-            isCameraOpened = true
+            camera.startPreview()
         }
+
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         val parameters = camera.parameters
-        parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-        parameters.focusAreas = listOf(Camera.Area(Rect(-100, -100, 100, 100), 100))
-        if (previewSize != null) {
-            parameters.setPreviewSize((previewSize as Camera.Size).width, (previewSize as Camera.Size).height)
+        val supportedFocusModes = parameters.supportedFocusModes
+
+        if (supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+        } else if (supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
         }
-        parameters.setPictureSize(1920, 1080)
+
+        if (parameters.maxNumFocusAreas != 0) {
+            parameters.focusAreas = listOf(Camera.Area(Rect(-100, -100, 100, 100), 1))
+        }
+
+        parameters.setPreviewSize(previewSize.width, previewSize.height)
+        parameters.setPictureSize(pictureSize.width, pictureSize.height)
+
         camera.parameters = parameters
-        val supportedPreviewSizes = parameters.supportedPreviewSizes
 
         camera.setPreviewDisplay(holder)
         camera.startPreview()
@@ -55,34 +92,15 @@ class CameraPreview(context: Context, var camera: Camera = Camera.open(), var pr
         isCameraOpened = false
     }
 
-    private fun getOptimalPreviewSize(sizes: List<Camera.Size>, w: Int, h: Int): Camera.Size? {
-        val ASPECT_TOLERANCE = 0.1
-        val targetRatio = h.toDouble() / w
 
-        var optimalSize: Camera.Size? = null
-        var minDiff = java.lang.Double.MAX_VALUE
-
-        val targetHeight = h
-
-        for (size in sizes) {
-            val ratio = size.width.toDouble() / size.height
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue
-            if (Math.abs(size.height - targetHeight) < minDiff) {
-                optimalSize = size
-                minDiff = Math.abs(size.height - targetHeight).toDouble()
-            }
+    fun takePicture(imageCapturedListener: ImageCapturedListener) {
+        camera.takePicture(null, null) { bytes, camera ->
+            imageCapturedListener.onImageCaptured(BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inPurgeable = true }))
         }
+    }
 
-        if (optimalSize == null) {
-            minDiff = java.lang.Double.MAX_VALUE
-            for (size in sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize = size
-                    minDiff = Math.abs(size.height - targetHeight).toDouble()
-                }
-            }
-        }
-        return optimalSize
+    private fun getEuclidDistance(x1: Int, y1: Int, x2: Int, y2: Int): Double {
+        return Math.sqrt((Math.abs(x1 - x2) * Math.abs(x1 - x2) + Math.abs(y1 - y2) * Math.abs(y1 - y2)).toDouble())
     }
 
 }
